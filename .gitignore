@@ -1,0 +1,38 @@
+# ---------- Unity ----------
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Mm]emoryCaptures/
+UserSettings/
+# Shader/Cache
+[Bb]ees/
+Sysroot/
+# Crash/Reports
+*.stackdump
+
+# ---------- IDE ----------
+.vs/
+.idea/
+*.user
+*.userprefs
+
+# ---------- Unity-generated project files (선택) ----------
+# Unity가 재생성 가능하므로 보통 무시
+*.csproj
+*.sln
+*.unityproj
+
+# ---------- OS ----------
+.DS_Store
+Thumbs.db
+
+# ---------- Packages ----------
+# Packages/manifest.json, packages-lock.json 등은 커밋됨 (중요)
+# (여긴 무시 목록 없음)
+
+# ---------- 중요: .meta는 절대 무시하지 말 것 ----------
+# *.meta (무시하면 참조가 끊어집니다) <-- 주의: 적지 마세요!
+
