@@ -3,17 +3,18 @@ using UnityEngine;
 public class ChickRun : MonoBehaviour
 {
     [Header("Body Parts")]
-    public Transform body;          // 몸통 전체 (눈, 부리, 눈썹 포함된 부모)
+    public Transform body;
     public Transform leftLeg;
     public Transform rightLeg;
     public Transform leftWing;
     public Transform rightWing;
 
     [Header("Animation Settings")]
-    public float runSpeed = 5f;     // 애니메이션 속도 (초당 싸이클)
-    public float legSwing = 25f;    // 다리 회전 각도
-    public float wingSwing = 20f;   // 날개 회전 각도
-    public float bounceHeight = 0.05f; // 몸통 들썩 높이
+    public float runSpeed = 5f;     
+    public float legSwing = 25f;
+    public float wingSwing = 20f;
+    public float bounceHeight = 0.1f;
+    public float idleThreshold = 0.2f;
 
     private Vector3 bodyBasePos;
     private Vector3 leftLegBaseRot;
@@ -21,9 +22,11 @@ public class ChickRun : MonoBehaviour
     private Vector3 leftWingBaseRot;
     private Vector3 rightWingBaseRot;
 
+    private float smoothAnimSpeed = 0f;
+    private float animTime = 0f; // 🟡 누적 시간 (Time.time 대신)
+
     void Start()
     {
-        // 초기값 저장
         bodyBasePos = body.localPosition;
         leftLegBaseRot = leftLeg.localEulerAngles;
         rightLegBaseRot = rightLeg.localEulerAngles;
@@ -33,22 +36,31 @@ public class ChickRun : MonoBehaviour
 
     void Update()
     {
-        float t = Time.time * runSpeed;
-        float sin = Mathf.Sin(t);
-        float cos = Mathf.Cos(t);
+        // 애니메이션 속도 보간
+        smoothAnimSpeed = Mathf.Lerp(smoothAnimSpeed, runSpeed, Time.deltaTime * 5f);
 
-        // --- 다리 ---
-        // 왼다리 앞으로, 오른다리 뒤로 (반대 위상)
+        // 속도에 따라 누적 시간 증가
+        animTime += smoothAnimSpeed * Time.deltaTime;
+
+        if (smoothAnimSpeed < idleThreshold)
+        {
+            // Idle
+            body.localPosition = bodyBasePos;
+            leftLeg.localEulerAngles = leftLegBaseRot;
+            rightLeg.localEulerAngles = rightLegBaseRot;
+            leftWing.localEulerAngles = leftWingBaseRot;
+            rightWing.localEulerAngles = rightWingBaseRot;
+            return;
+        }
+
+        // 사인파 기반 애니메이션 (Time.time 대신 animTime 사용)
+        float sin = Mathf.Sin(animTime);
+        float absSin = Mathf.Abs(sin);
+
         leftLeg.localEulerAngles = leftLegBaseRot + new Vector3(legSwing * sin, 0, 0);
         rightLeg.localEulerAngles = rightLegBaseRot + new Vector3(-legSwing * sin, 0, 0);
-
-        // --- 날개 ---
-        // 오른날개는 왼다리와 같은 위상, 왼날개는 반대 위상
         rightWing.localEulerAngles = rightWingBaseRot + new Vector3(wingSwing * sin, 0, 0);
         leftWing.localEulerAngles = leftWingBaseRot + new Vector3(-wingSwing * sin, 0, 0);
-
-        // --- 몸통 (들썩) ---
-        float bounce = Mathf.Abs(sin) * bounceHeight;
-        body.localPosition = bodyBasePos + new Vector3(0, bounce, 0);
+        body.localPosition = bodyBasePos + new Vector3(0, absSin * bounceHeight, 0);
     }
 }

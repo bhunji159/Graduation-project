@@ -1,68 +1,28 @@
 using UnityEngine;
 
-namespace GraduationProject.Course
+namespace DuckRunning.Course
 {
     public enum CourseType
     {
-        Easy = 0,
-        Normal = 1,
-        Hard = 2
+        Easy,
+        Normal,
+        Hard
     }
 
-    [CreateAssetMenu(fileName = "CourseData", menuName = "Graduation Project/Course Data")]
+    [CreateAssetMenu(fileName = "CourseData", menuName = "DuckRunning/Course Data")]
     public class CourseData : ScriptableObject
     {
-        [Header("Identity")]
-        public CourseType courseType;                // 인스펙터용 (드롭다운)
-        public int CourseId => (int)courseType;      // 내부 ID
-        public string displayName;                   // UI 표기용 이름
+        [Header("Basic Info")]
+        public CourseType courseType = CourseType.Easy;
 
-        [Header("Overview (for card UI)")]
-        public float lengthMeters = 3000f;           // 총 거리 (m)
-        public int targetMinutes = 20;               // 목표 시간 (분)
-        public float avgSpeedKmh = 9.0f;             // 평균 속도 (km/h)
-        public float avgInclinePercent = 2.0f;       // 평균 경사 (%)
+        [Tooltip("UI에 표시될 이름")]
+        public string displayName = "Standard Course";
 
-        [Header("Track Tiles (main lane)")]
-        public float tileLength = 10f;               // 타일 하나의 길이 (m)
-        public WeightedPrefab[] tileSet;
+        [Tooltip("총 거리 (미터)")]
+        public float totalLengthMeters = 3000f;
 
-        [Header("Side Decorations (left/right)")]
-        public SpawnRule leftDecor;
-        public SpawnRule rightDecor;
+        [Tooltip("기본 러닝 속도 (km/h)")]
+        public float baseSpeedKmh = 8f;
 
-        [Header("Events (coins, boost, etc.)")]
-        public EventRule[] events;
-
-        [Header("Visual Slope")]
-        public AnimationCurve slopeDegByProgress = AnimationCurve.Linear(0, 0, 1, 0);
-    }
-
-    [System.Serializable]
-    public struct WeightedPrefab
-    {
-        public GameObject prefab;
-        [Range(0.01f, 10f)] public float weight;
-    }
-
-    [System.Serializable]
-    public struct SpawnRule
-    {
-        [Tooltip("100m 당 평균 몇 개 생성할지")]
-        public float densityPer100m;
-        public WeightedPrefab[] set;
-        public Vector2 xRange;
-        public Vector2 yOffsetRange;
-        public Vector2 zJitterRange;
-        public float minSpacingMeters;
-    }
-
-    [System.Serializable]
-    public struct EventRule
-    {
-        public string eventId;
-        [Range(0f, 1f)] public float chancePer100m;
-        public float minIntervalMeters;
-        public WeightedPrefab[] set;
     }
 }

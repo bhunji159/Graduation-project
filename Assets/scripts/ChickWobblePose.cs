@@ -7,17 +7,17 @@ public class ChickTiltFlapV2 : MonoBehaviour
     public Transform rightWing; 
     public Transform rightFoot;
     [Header("Body Lift")]
-    public float z = -5f;
-    public float y = 10f;
+
+    public float y = 5f;
 
     [Header("Body Movement")]
     public float forwardTilt = 45f;
-    public float wobbleAmount = 10f;
+    public float wobbleAmount = 5f;
     public float wobbleSpeed = 2f;
 
     [Header("Wing Flap")]
-    public float flapSpeed = 8f;
-    public float flapAmount = 35f;
+    public float flapSpeed = 15f;
+    public float flapAmount = 60f;
 
     private Quaternion bodyBaseRot;
     private Quaternion rightFootBaseRot;
@@ -27,17 +27,17 @@ public class ChickTiltFlapV2 : MonoBehaviour
     void Start()
     {
         bodyBaseRot = body.localRotation;
-        rightFootBaseRot = rightFoot.localRotation;
+        
 
-        leftWing.position += new Vector3(2f, 3f, -7f);
-        rightWing.position += new Vector3(-2f, 3f, -7f);
-        body.localPosition += new Vector3(0f, y, z);
+        leftWing.position += new Vector3(-2/10f, 3/10f, +7/10f);
+        rightWing.position += new Vector3(2/10f, 3/10f, 7/10f);
+        body.localPosition += new Vector3(0f, y, 0);
         rightFoot.localPosition += new Vector3(0f, y, 5);
         // 초기 회전 정렬
-        rightFoot.localRotation = Quaternion.Euler(120f, 0f, 0f);
+        rightFoot.localRotation = Quaternion.Euler(-120f, 0f, 0f);
         leftWing.localRotation = Quaternion.Euler(140f, 0f, 90f);
         rightWing.localRotation = Quaternion.Euler(140f, 0f, -90f);
-
+        rightFootBaseRot = rightFoot.localRotation;
         leftWingBaseRot = leftWing.localRotation;
         rightWingBaseRot = rightWing.localRotation;
     }
