@@ -13,4 +13,9 @@ public class BLECommand
     }
 
     public string ToJson() => UnityEngine.JsonUtility.ToJson(this);
+    public override string ToString()
+    {
+        return $"{cmd}({value})";
+    }
+
 }
